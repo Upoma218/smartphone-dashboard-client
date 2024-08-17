@@ -8,10 +8,10 @@ import {
   Modal,
   message,
 } from "antd";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { useState } from "react";
 import { objectToQueryParamString } from "./utils/constant";
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
@@ -22,16 +22,15 @@ type TProps = {
 const FilterComponent = ({ setQuery }: TProps) => {
   const [open, setOpen] = useState(false);
 
-
   const onFinish = async (data: Record<string, string>) => {
     try {
       setOpen(false);
 
       if (data.releaseDate && dayjs(data.releaseDate).isValid()) {
-        const formattedDate = dayjs(data.releaseDate).format('YYYY-MM-DD');
+        const formattedDate = dayjs(data.releaseDate).format("YYYY-MM-DD");
         data.releaseDate = formattedDate;
       }
-      
+
       setQuery(objectToQueryParamString(data));
       message.success("Product retrived successfully!");
     } catch (error) {
@@ -46,7 +45,7 @@ const FilterComponent = ({ setQuery }: TProps) => {
   return (
     <>
       <Button
-        className="bg-sky-900 text-white mr-2"
+        className=" text-sky-900 border border-1 border-sky-900 mr-2"
         type="primary"
         onClick={() => setOpen(true)}
       >

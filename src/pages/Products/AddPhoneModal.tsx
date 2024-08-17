@@ -1,15 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, DatePicker, Form, Input, InputNumber, Modal } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Modal,
+} from "antd";
 import { useState } from "react";
-import { useAddProductMutation } from "./productsApi";
 import { TProduct } from "../../redux/types/productsTypes";
-import { message } from 'antd';
+import { useAddProductMutation } from "./productsApi";
 
 const AddPhoneModal = () => {
   const [open, setOpen] = useState(false);
   const [addProductMutation] = useAddProductMutation();
 
-  const onFinish = async (values : TProduct) => {
+  const onFinish = async (values: TProduct) => {
     try {
       await addProductMutation(values);
 
@@ -22,14 +29,14 @@ const AddPhoneModal = () => {
     }
   };
 
-  const onFinishFailed = (errorInfo : any) => {
+  const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
 
   return (
     <>
       <Button
-        className="bg-sky-900 text-white"
+        className="text-sky-900 border border-1 border-sky-900"
         type="primary"
         onClick={() => setOpen(true)}
       >
@@ -103,44 +110,64 @@ const AddPhoneModal = () => {
           >
             <DatePicker style={{ width: "100%" }} />
           </Form.Item>
-          <Form.Item label="Brand" name="brand"rules={[
+          <Form.Item
+            label="Brand"
+            name="brand"
+            rules={[
               {
                 required: true,
                 message: "Please enter brand name!",
               },
-            ]}>
+            ]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="Model" name="model"rules={[
+          <Form.Item
+            label="Model"
+            name="model"
+            rules={[
               {
                 required: true,
                 message: "Please enter model name!",
               },
-            ]}>
+            ]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="OS" name="operatingSystem"rules={[
+          <Form.Item
+            label="OS"
+            name="operatingSystem"
+            rules={[
               {
                 required: true,
                 message: "Please enter OS name!",
               },
-            ]}>
+            ]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="Storage" name="storageCapacity"rules={[
+          <Form.Item
+            label="Storage"
+            name="storageCapacity"
+            rules={[
               {
                 required: true,
                 message: "Please storageCapacity",
               },
-            ]}>
+            ]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="Screen" name="screenSize"rules={[
+          <Form.Item
+            label="Screen"
+            name="screenSize"
+            rules={[
               {
                 required: true,
                 message: "Please enter screen size!",
               },
-            ]}>
+            ]}
+          >
             <Input />
           </Form.Item>
           <Form.Item label="Camera" name="cameraQuality">
@@ -168,6 +195,5 @@ const AddPhoneModal = () => {
     </>
   );
 };
-
 
 export default AddPhoneModal;
