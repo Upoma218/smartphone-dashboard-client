@@ -1,9 +1,9 @@
 import { Layout, Menu, theme } from "antd";
-import SearchBar from "../../pages/navBarItems/SearchBar";
 import { NavLink, Outlet } from "react-router-dom";
-import { useAppDispatch } from "../../redux/hook";
-import { logout, selectCurrentUser } from "../../redux/features/auth/authSlice";
 import { toast } from "sonner";
+import SearchBar from "../../pages/navBarItems/SearchBar";
+import { logout, selectCurrentUser } from "../../redux/features/auth/authSlice";
+import { useAppDispatch } from "../../redux/hook";
 import { useAppSelector } from "../../redux/store";
 
 const { Header, Content, Sider } = Layout;
@@ -11,6 +11,7 @@ const { Header, Content, Sider } = Layout;
 const MainLayout = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
+  console.log(user);
   const handleLogout = () => {
     const toastId = toast.loading("Registering . . .");
     dispatch(logout());
@@ -23,46 +24,41 @@ const MainLayout = () => {
       key: "home",
       label: <NavLink to="/">Home</NavLink>,
     },
-    {
+    !user?.userId && {
       key: "login",
       label: <NavLink to="/login">Login</NavLink>,
     },
-    {
+    user?.userId && {
       key: "logout",
       label: (
-        <button className="border-none " onClick={handleLogout}>
+        <button className="border-none" onClick={handleLogout}>
           Logout
         </button>
       ),
     },
-    {
+    user?.userId && {
       key: "product",
-      label: <NavLink className={!user ? "hidden" : ""} to="/product">Product</NavLink>,
+      label: <NavLink to="/product">Product</NavLink>,
     },
-
-    {
+    user?.userId && {
       key: "salesHistory",
-      label: (
-        <NavLink className={!user ? "hidden" : ""} to="/order">
-          Sales History
-        </NavLink>
-      ),
+      label: <NavLink to="/order">Sales History</NavLink>,
     },
-    {
-      key: "register",
-      label: (
-        <NavLink
-          className={user?.role === "seller" ? "hidden" : !user ? "hidden" : ""}
-          to="/register"
-        >
-          User Registration
-        </NavLink>
-      ),
-    },
-  ].map((item) => ({
-    key: item.key,
-    label: item.label,
-  }));
+    user?.userId &&
+      user?.role === "superAdmin" && {
+        key: "register",
+        label: <NavLink to="/register">User Registration</NavLink>,
+      },
+  ]
+    // Filter out falsey values, ensuring only valid objects are included
+    .filter((item): item is { key: string; label: JSX.Element } =>
+      Boolean(item)
+    )
+    // Map the remaining valid items
+    .map((item) => ({
+      key: item.key,
+      label: item.label,
+    }));
 
   const {
     token: { colorBgContainer },
